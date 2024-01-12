@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# syncs models from ollama to somewhere else
+#
 # Base directories
 base_dir=~/.ollama/models
 manifest_dir=$base_dir/manifests/registry.ollama.ai
