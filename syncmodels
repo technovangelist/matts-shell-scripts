@@ -14,7 +14,7 @@ find "$publicmodels_dir" -type l -exec rm {} +
 mkdir -p "$publicmodels_dir"
 
 # Use find to get all files under the 'model' directories
-find "$manifest_dir" -type f -mindepth 3 -maxdepth 3 | while IFS= read -r file; do
+find "$manifest_dir" -mindepth 3 -maxdepth 3  -type f | while IFS= read -r file; do
     user=$(basename "$(dirname "$(dirname "$file")")" | sed 's/^registry\.ollama\.ai/ollama/')
     model=$(basename "$(dirname "$file")")
     tag=$(basename "$file")
