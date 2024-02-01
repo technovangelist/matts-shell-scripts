@@ -1,0 +1,26 @@
+#!/bin/bash
+
+base_dir=~/.ollama/models
+manifest_dir=$base_dir/manifests/registry.ollama.ai
+blob_dir=$base_dir/blobs
+publicmodels_dir=~/publicmodels/mattw/lmstudio
+
+find "$publicmodels_dir" -type l -exec rm {} +
+
+mkdir -p "$publicmodels_dir"
+
+find "$manifest_dir" -type f -mindepth 3 -maxdepth 3 | while IFS= read -r file; do
+    user=$(basename "$(dirname "$(dirname "$file")")" | sed 's/^registry\.ollama\.ai/ollama/')
+    model=$(basename "$(dirname "$file")")
+    tag=$(basename "$file")
+    
+    digest=$(jq -r '.layers[] | select(.mediaType == "application/vnd.ollama.image.model") | .digest' "$file")
+    mkdir -p "$publicmodels_dir/$user/$model/"
+    ln -s "$blob_dir/$digest" "$publicmodels_dir/$user/$model/$model-$tag.bin"
+    
+    echo "$user - $model:$tag"
+done
+
+
+
+
