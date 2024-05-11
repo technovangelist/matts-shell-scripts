@@ -15,8 +15,9 @@ find "$manifest_dir" -type f -mindepth 3 -maxdepth 3 | while IFS= read -r file; 
     tag=$(basename "$file")
     
     digest=$(jq -r '.layers[] | select(.mediaType == "application/vnd.ollama.image.model") | .digest' "$file")
+    digest="${digest//:/-}"
     mkdir -p "$publicmodels_dir/$user/$model/"
-    ln -s "$blob_dir/$digest" "$publicmodels_dir/$user/$model/$model-$tag.bin"
+    ln -s "$blob_dir/$digest" "$publicmodels_dir/$user/$model/$model-$tag.gguf"
     
     echo "$user - $model:$tag"
 done
